@@ -1,0 +1,244 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>for you 🤍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* START */
+.start {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.start button {
+  padding: 15px 25px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: none;
+  background: white;
+  cursor: pointer;
+}
+
+/* VIDEO */
+video {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(25%) blur(5px);
+  opacity: 0;
+  transition: 2s;
+}
+
+/* SLIDES */
+#slideshow img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 2s ease, transform 8s ease;
+}
+
+/* TEXT */
+.text {
+  position: absolute;
+  bottom: 18%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  padding: 20px;
+  z-index: 2;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+#desc {
+  font-size: 16px;
+  opacity: 0;
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* ENDING */
+.ending {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.ending img {
+  width: 80%;
+  max-width: 300px;
+  border-radius: 20px;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: 3s;
+}
+
+.ending h1 {
+  margin-top: 20px;
+  opacity: 0;
+  text-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<div class="start">
+  <button onclick="start()">tap to open 💌</button>
+</div>
+
+<video id="bgVideo" loop muted playsinline>
+  <source src="awan.mp4" type="video/mp4">
+</video>
+
+<div id="slideshow">
+  <img src="IMG_1.webp">
+  <img src="IMG_2.webp">
+  <img src="IMG_3.webp">
+  <img src="IMG_4.webp">
+</div>
+
+<div class="text">
+  <h1>our story 🤍</h1>
+  <p id="desc"></p>
+</div>
+
+<div class="ending" id="ending">
+  <img src="END.webp" id="endImg">
+  <h1 id="endText">i love you 🤍</h1>
+</div>
+
+<audio id="music">
+  <source src="risal1.mp3">
+</audio>
+
+<script>
+let video = document.getElementById("bgVideo");
+let music = document.getElementById("music");
+let slides = document.querySelectorAll("#slideshow img");
+let desc = document.getElementById("desc");
+
+let index = 0;
+let typingSpeed = 35;
+
+/* ⏱️ BEAT TIMING (SESUAIIN SAMA LAGU LU) */
+let beatMoments = [0, 5, 10, 15, 20, 25]; 
+let endingTime = 30; // DETIK KE BERAPA ENDING MUNCUL
+
+let stories = [
+  "pertama kali kita ketemu...\naku ga nyangka bakal ada di titik bikin ini buat kamu🤍",
+  "lucu sih kalo di pikir pikir...\ndari mau coba profesional,sampe aku beneran suka sama kamu",
+  "kita mulai sering ngobrol...\ndan aku mulai nyaman",
+  "pelan-pelan...\nkamu jadi rumah buat kamu",
+  "dan akhirnya...\naku sadar",
+  "aku kamu berhasil bener bikin aku jatuh cinta 🤍"
+];
+
+function start() {
+  document.querySelector(".start").style.display = "none";
+
+  video.style.opacity = 1;
+  video.play().catch(()=>{});
+  music.play().catch(()=>{});
+
+  syncWithMusic();
+}
+
+/* 🔥 BEAT SYNC SYSTEM */
+function syncWithMusic() {
+  let currentBeat = 0;
+
+  let interval = setInterval(() => {
+    let time = music.currentTime;
+
+    if (currentBeat < beatMoments.length && time >= beatMoments[currentBeat]) {
+      showSlide(currentBeat);
+      currentBeat++;
+    }
+
+    if (time >= endingTime) {
+      showEnding();
+      clearInterval(interval);
+    }
+  }, 200);
+}
+
+/* 🎬 SLIDE */
+function showSlide(i) {
+  slides.forEach(s => {
+    s.style.opacity = 0;
+    s.style.transform = "scale(1)";
+  });
+
+  let current = slides[i % slides.length];
+  current.style.opacity = 0.7;
+  current.style.transform = "scale(1.15)";
+
+  typeText(stories[i]);
+}
+
+/* ✨ TYPING */
+function typeText(text) {
+  desc.innerHTML = "";
+  desc.style.opacity = 1;
+
+  let i = 0;
+  function typing() {
+    if (i < text.length) {
+      desc.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, typingSpeed);
+    }
+  }
+  typing();
+}
+
+/* 💔 ENDING DROP */
+function showEnding() {
+  let ending = document.getElementById("ending");
+  let img = document.getElementById("endImg");
+  let text = document.getElementById("endText");
+
+  ending.style.display = "flex";
+
+  setTimeout(() => {
+    img.style.opacity = 1;
+    img.style.transform = "scale(1)";
+  }, 500);
+
+  setTimeout(() => {
+    text.style.opacity = 1;
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
+```

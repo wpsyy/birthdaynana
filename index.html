@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>for you 🤍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* START SCREEN */
+.start {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.start button {
+  padding: 15px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+}
+
+/* VIDEO */
+video {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(35%) blur(3px);
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+/* SLIDESHOW */
+#slideshow img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 3s;
+}
+
+/* TEXT */
+.text {
+  position: absolute;
+  bottom: 18%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+h1, p {
+  opacity: 0;
+  transition: 2s;
+}
+
+/* ENDING */
+.ending {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.ending img {
+  width: 80%;
+  max-width: 300px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: 3s;
+}
+
+.ending h1 {
+  margin-top: 20px;
+  font-family: 'Playfair Display', serif;
+  opacity: 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div class="start">
+  <button onclick="start()">tap to open message 💌</button>
+</div>
+
+<!-- VIDEO -->
+<video id="bgVideo" loop muted>
+  <source src="awan.mp4" type="video/mp4">
+</video>
+
+<!-- SLIDES -->
+<div id="slideshow">
+  <img src="IMG_20240814_072725_829.webp">
+  <img src="IMG_20241103_172316_369.webp">
+  <img src="IMG_20240605_182736_894.webp">
+  <img src="IMG_20260315_194850_917.webp">
+  <img src="IMG_20250219_103359_260.webp">
+  <img src="IMG_20250728_123219_430.webp">
+</div>
+
+<!-- TEXT -->
+<div class="text">
+  <h1 id="title"></h1>
+  <p id="desc"></p>
+</div>
+
+<!-- ENDING -->
+<div class="ending" id="ending">
+  <img src="IMG_20250107_200842_518.webp" id="endImg">
+  <h1 id="endText">i love you 🤍</h1>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="music.mp3">
+</audio>
+
+<script>
+let video = document.getElementById("bgVideo");
+let music = document.getElementById("music");
+
+// START FUNCTION
+function start() {
+  document.querySelector(".start").style.display = "none";
+
+  video.style.opacity = 1;
+  video.play();
+  music.play();
+
+  showSlide();
+  showText();
+  setTimeout(showEnding, 25000); // waktu ending muncul
+}
+
+// SLIDESHOW
+let slides = document.querySelectorAll("#slideshow img");
+let index = 0;
+
+function showSlide() {
+  slides.forEach(s => s.style.opacity = 0);
+  slides[index].style.opacity = 0.6;
+  index = (index + 1) % slides.length;
+  setTimeout(showSlide, 5000);
+}
+
+// TEXT
+let lines = [
+  "happy birthday, kamu 🤍",
+  "aku ga tau harus mulai dari mana…",
+  "tapi yang jelas,",
+  "aku bersyukur banget punya kamu.",
+  "",
+  "di dunia yang kadang ga ramah ini,",
+  "kamu selalu jadi tempat pulang.",
+  "",
+  "dan kalau suatu hari kamu capek,",
+  "aku harap kamu inget…",
+  "aku selalu ada buat kamu."
+];
+
+let i = 0;
+function showText() {
+  let desc = document.getElementById("desc");
+  let title = document.getElementById("title");
+
+  title.innerHTML = "for you 🤍";
+  title.style.opacity = 1;
+
+  function loop() {
+    if (i < lines.length) {
+      desc.innerHTML += lines[i] + "\n";
+      desc.style.opacity = 1;
+      i++;
+      setTimeout(loop, 2500);
+    }
+  }
+  setTimeout(loop, 2000);
+}
+
+// ENDING
+function showEnding() {
+  let ending = document.getElementById("ending");
+  let img = document.getElementById("endImg");
+  let text = document.getElementById("endText");
+
+  ending.style.display = "flex";
+
+  setTimeout(() => {
+    img.style.opacity = 1;
+  }, 1000);
+
+  setTimeout(() => {
+    text.style.opacity = 1;
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
